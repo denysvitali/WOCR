@@ -11,7 +11,9 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.googlecode.tesseract.android.TessBaseAPI;
 
@@ -38,6 +40,7 @@ public class MainActivity extends AppCompatActivity {
     private ImageView cameraPreview;
     private TessBaseAPI baseAPI;
     private String currentPhotoPath;
+    private TextView pvrCode;
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
@@ -46,6 +49,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         cameraPreview = findViewById(R.id.cameraPreview);
+        pvrCode = findViewById(R.id.pvrCode);
 
         Button buttonTakePicture = findViewById(R.id.btn_take_pic);
         buttonTakePicture.setOnClickListener((action)->{
@@ -133,6 +137,7 @@ public class MainActivity extends AppCompatActivity {
             String noSpaces = s.replace(" ", "");
             if(noSpaces.length() == 52){
                 Log.i(TAG, noSpaces);
+                runOnUiThread(()-> pvrCode.setText(noSpaces));
             }
         }
     }
@@ -174,7 +179,7 @@ public class MainActivity extends AppCompatActivity {
         bmOptions.inPurgeable = true;
 
         Matrix m = new Matrix();
-        m.postRotate(-90);
+        m.postRotate(0);
 
         Bitmap bitmap = BitmapFactory.decodeFile(currentPhotoPath, bmOptions);
         if(bitmap == null){
